@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweet Delights - Menu</title>
+
+    <style>
+        /* ========================================================== */
+        /* 1. PASTEL PINK PALETTE & KEYFRAMES */
+        /* ========================================================== */
+        :root {
+            --pastel-pink-dark: #C26780;        /* Rosewood (for dark text/contrast) */
+            --pastel-pink-medium: #F9A6C0;      /* Blush Pink (for titles/accents) */
+            --pastel-pink-light: #F4DDE5;       /* Pale Pink (for dividers/subtle backgrounds) */
+            --pastel-pink-hover: #FFF0F5;       /* Lavender Blush (for item hover) */
+            --background: #ffffff; 
+            --text-dark: var(--pastel-pink-dark);
+            --text-light: #ffffff;
+            --image-bg: #EEDEE6;
+            --section-bg: #fdfcff;
+        }
+
+        @keyframes menuLoad {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleUp {
+            0% { opacity: 0; transform: scale(0.99); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* ========================================================== */
+        /* 2. NAVIGATION BAR STYLES (NEW) */
+        /* ========================================================== */
+        .main-header {
+            background-color: var(--background); 
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky; /* Keeps the nav bar visible at the top */
+            top: 0;
+            z-index: 1000;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--pastel-pink-dark);
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: var(--text-dark);
+            padding: 10px 15px;
+            margin: 0 5px;
+            font-size: 0.95em;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            border-radius: 4px;
+        }
+
+        /* Hover and Active Link Styles */
+        .nav-links li a:hover {
+            color: var(--text-light);
+            background-color: var(--pastel-pink-medium);
+        }
+        .nav-links li .active-link {
+            color: var(--text-light);
+            background-color: var(--pastel-pink-dark); /* Darker active link */
+        }
+        .nav-links li .active-link:hover {
+             background-color: var(--pastel-pink-dark); 
+        }
+
+        .order-btn {
+            text-decoration: none;
+            background-color: var(--pastel-pink-medium);
+            color: var(--text-light);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .order-btn:hover {
+            background-color: var(--pastel-pink-dark);
+            transform: translateY(-1px);
+        }
+
+        /* ========================================================== */
+        /* 3. GENERAL AND MENU STYLES (Adjusted) */
+        /* ========================================================== */
+        body {
+            font-family: 'Times New Roman', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F8F0F3; 
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 40px auto; /* Margin moved here */
+            background-color: var(--background);
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); 
+        }
+        
+        /* The old header was removed, but the banner title remains */
+        .image-showcase {
+            margin: 0 0 30px 0; /* Adjusted top margin since nav is there */
+            height: 200px; 
+            background-color: var(--image-bg);
+            background-image: url('placeholder-cake-image.jpg'); 
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--pastel-pink-dark);
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            animation: scaleUp 0.8s ease-out forwards;
+            animation-delay: 0.2s; /* Faster delay for the banner */
+        }
+        .image-showcase span {
+            background-color: rgba(255, 255, 255, 0.7); 
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+
+        /* --- MENU SECTION STYLES (Retained split-view layout) --- */
+        .menu-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: var(--section-bg);
+            border-radius: 5px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+            opacity: 0; 
+            animation: menuLoad 0.8s ease-out forwards;
+            min-height: 250px; 
+        }
+        
+        /* Staggered Animation Delay (Adjusted) */
+        .menu-section:nth-child(2) { animation-delay: 1.0s; } /* Cakes */
+        .menu-section:nth-child(3) { animation-delay: 1.2s; } /* Cup Cakes */
+        .menu-section:nth-child(4) { animation-delay: 1.4s; } /* Cookies */
+        .menu-section:nth-child(5) { animation-delay: 1.6s; } /* Pastries */
+
+        .menu-content {
+            display: flex;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        .image-column, .menu-column {
+            flex: 1;
+            min-width: 45%;
+        }
+
+        .image-column {
+            background-size: cover;
+            background-position: center;
+            border-radius: 5px;
+            min-height: 250px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .menu-column {
+            padding: 10px 0;
+        }
+
+        .menu-heading-block {
+            background-color: var(--pastel-pink-medium); 
+            color: var(--text-light);
+            padding: 10px;
+            margin-bottom: 15px;
+            display: flex; 
+            align-items: center;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .menu-heading-block:hover {
+            background-color: var(--pastel-pink-dark); 
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        .menu-icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+        .menu-title {
+            font-size: 1.5em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0; 
+        }
+
+        .menu-item-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 12px;
+            font-size: 1em;
+            border-bottom: 1px dashed var(--pastel-pink-light); 
+            padding: 5px 8px;
+            transition: all 0.3s ease; 
+            border-radius: 5px;
+        }
+        .item:hover {
+            background-color: var(--pastel-pink-hover); 
+            transform: translateY(-2px); 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+            cursor: pointer;
+        }
+        .item-name {
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+        .price-group {
+            display: flex;
+            gap: 15px;
+            color: var(--pastel-pink-dark); 
+            font-weight: 600;
+        }
+        .cake-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 0 8px;
+            font-weight: bold;
+            font-size: 1em;
+            color: var(--pastel-pink-medium);
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+            }
+            .nav-links {
+                flex-direction: column;
+                margin: 10px 0;
+                align-items: center;
+            }
+            .nav-links li {
+                margin: 5px 0;
+            }
+            .menu-content {
+                flex-direction: column;
+            }
+            .image-column {
+                order: -1;
+            }
+        }
+        
+    </style>
+</head>
+<body style="background-color: #F8F0F3;">
+
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="logo">Sweet Delights</div>
+            <ul class="nav-links">
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/index.html">Home</a></li>
+                <li><a href="menu.html" class="active-link">Menu</a></li>
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/gallery.html">Gallery</a></li>
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/about.html">About</a></li>
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/contact.html">Contact</a></li>
+            </ul>
+            <a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/order.html" class="order-btn" class="order-btn">Order Online Now</a>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <div class="image-showcase">
+            <span>Our Signature Sweet Selection</span>
+        </div>
+
+        <div class="menu-section">
+            <div class="menu-heading-block">
+                <div class="menu-icon">🎂</div>
+                <h2 class="menu-title">Cakes</h2>
+            </div>
+            <div class="menu-content">
+                <div class="image-column" style="background-image: url('C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/cakemenu.jfif');">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="menu-column">
+                    <div class="cake-header">
+                        <span style="width: auto;">Item</span>
+                        <span>1 KG</span>
+                    </div>
+                    <ul class="menu-item-list">
+                        <li class="item"><span class="item-name">Devil's Delight</span><span class="price-group"><span>600</span></span></li>
+                        <li class="item"><span class="item-name">Waffle Chocolate</span><span class="price-group"><span>700</span></span></li>
+                        <li class="item"><span class="item-name">Black Forest</span><span class="price-group"><span>800</span></span></li>
+                        <li class="item"><span class="item-name">Rosette Cake</span><span class="price-group"><span>850</span></span></li>
+                        <li class="item"><span class="item-name">Dutch Chocolate</span><span class="price-group"><span>890</span></span></li>
+                        <li class="item"><span class="item-name">Chocolate Truffle</span><span class="price-group"><span>900</span></span></li>
+                        <li class="item"><span class="item-name">Oreo Cake</span><span class="price-group"><span>900</span></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <div class="menu-heading-block">
+                <div class="menu-icon">🧁</div>
+                <h2 class="menu-title">Cup Cakes</h2>
+            </div>
+            <div class="menu-content">
+                <div class="menu-column">
+                    <ul class="menu-item-list">
+                        <li class="item"><span class="item-name">Devils Delight</span><span class="price-group"><span>80</span></span></li>
+                        <li class="item"><span class="item-name">Smiley</span><span class="price-group"><span>35</span></span></li>
+                        <li class="item"><span class="item-name">Waffle Chocolate</span><span class="price-group"><span>70</span></span></li>
+                        <li class="item"><span class="item-name">Pineapple</span><span class="price-group"><span>40</span></span></li>
+                        <li class="item"><span class="item-name">Black Forest</span><span class="price-group"><span>75</span></span></li>
+                        <li class="item"><span class="item-name">Rosette</span><span class="price-group"><span>45</span></span></li>
+                        <li class="item"><span class="item-name">Dutch Chocolate</span><span class="price-group"><span>80</span></span></li>
+                        <li class="item"><span class="item-name">Chocolate Truffle</span><span class="price-group"><span>50</span></span></li>
+                        <li class="item"><span class="item-name">Oreo</span><span class="price-group"><span>65</span></span></li>
+                    </ul>
+                </div>
+                <div class="image-column" style="background-image: url('C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/cupmenu.jfif');">
+                    <div class="image-overlay"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-section">
+            <div class="menu-heading-block">
+                <div class="menu-icon">🍪</div>
+                <h2 class="menu-title">Cookies & Macarons</h2>
+            </div>
+            <div class="menu-content">
+                <div class="image-column" style="background-image: url('C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/macmenu.jfif');">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="menu-column">
+                    <ul class="menu-item-list">
+                        <li class="item"><span class="item-name">Chocolate Chip Cookie (per piece)</span><span class="price-group"><span>50</span></span></li>
+                        <li class="item"><span class="item-name">Snickerdoodle (per piece)</span><span class="price-group"><span>45</span></span></li>
+                        <li class="item"><span class="item-name">Oatmeal Raisin Cookie</span><span class="price-group"><span>60</span></span></li>
+                        <li class="item"><span class="item-name">Almond Biscotti</span><span class="price-group"><span>70</span></span></li>
+                        <li class="item"><span class="item-name">Red Velvet Macarons (box of 6)</span><span class="price-group"><span>350</span></span></li>
+                        <li class="item"><span class="item-name">Pistachio Macarons (box of 6)</span><span class="price-group"><span>400</span></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <div class="menu-heading-block">
+                <div class="menu-icon">🥐</div>
+                <h2 class="menu-title">Small Pastries & Pies</h2>
+            </div>
+            <div class="menu-content">
+                <div class="menu-column">
+                    <ul class="menu-item-list">
+                        <li class="item"><span class="item-name">Cannoli</span><span class="price-group"><span>80</span></span></li> 
+                        <li class="item"><span class="item-name">Eclair</span><span class="price-group"><span>60</span></span></li>
+                        <li class="item"><span class="item-name">Cinnamon Roll</span><span class="price-group"><span>110</span></span></li>
+                        <li class="item"><span class="item-name">Plain Croissant</span><span class="price-group"><span>40</span></span></li>
+                        <li class="item"><span class="item-name">Pie Slice: Cherry</span><span class="price-group"><span>100</span></span></li>
+                        <li class="item"><span class="item-name">Pie Slice: Blueberry</span><span class="price-group"><span>120</span></span></li>
+                        <li class="item"><span class="item-name">Lemon Tartlet</span><span class="price-group"><span>50</span></span></li>
+                    </ul>
+                </div>
+                 <div class="image-column" style="background-image: url('C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/pasmenu.jfif');">
+                     <div class="image-overlay"></div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>

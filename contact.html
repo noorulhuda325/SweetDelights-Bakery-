@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweet Delights - Contact Us</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ========================================================== */
+        /* 1. PALETTE & GLOBAL STYLES */
+        /* ========================================================== */
+        :root {
+            --pastel-pink-dark: #C26780;
+            /* Rosewood */
+            --pastel-pink-medium: #F9A6C0;
+            /* Blush Pink */
+            --pastel-pink-light: #F4DDE5;
+            /* Pale Pink */
+            --pastel-pink-hover: #FFF0F5;
+            /* Lavender Blush */
+            --background: #ffffff;
+            --text-dark: var(--pastel-pink-dark);
+            --text-light: #ffffff;
+            --form-border: #cccccc;
+            --button-color: #E29F86;
+            /* Soft brown/peach for the Send button */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F8F0F3;
+        }
+
+        /* --- APPLY PLAYFAIR DISPLAY TO ALL TITLES/HEADERS --- */
+        .logo,
+        .contact-hero h1,
+        .form-heading h2,
+        .footer h3,
+        .social-media-section h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* -------------------------------------------------- */
+
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: var(--background);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .transition-ease {
+            transition: all 0.3s ease;
+        }
+
+        /* ========================================================== */
+        /* 2. NAVIGATION BAR STYLES */
+        /* ========================================================== */
+        .main-header {
+            background-color: var(--background);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--pastel-pink-dark);
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: var(--text-dark);
+            padding: 10px 15px;
+            margin: 0 5px;
+            font-size: 0.95em;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .nav-links li a:hover {
+            color: var(--text-light);
+            background-color: var(--pastel-pink-medium);
+        }
+
+        .nav-links li .active-link {
+            color: var(--text-light);
+            background-color: var(--pastel-pink-dark);
+        }
+
+        .order-btn {
+            text-decoration: none;
+            background-color: var(--pastel-pink-medium);
+            color: var(--text-light);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .order-btn:hover {
+            background-color: var(--pastel-pink-dark);
+            transform: translateY(-1px);
+        }
+
+        /* ========================================================== */
+        /* 3. CONTACT SECTION SPECIFIC STYLES */
+        /* ========================================================== */
+
+        /* Hero Banner for Contact */
+        .contact-hero {
+            padding: 80px 20px 0;
+            text-align: center;
+            background-image: url('C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/bgc.jfif');
+            background-size: cover;
+            background-position: center bottom;
+            color: var(--text-dark);
+            position: relative;
+        }
+
+        .hero-overlay {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 40px 20px 40px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 8px;
+            transform: translateY(-20px);
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+            animation-delay: 0.5s;
+        }
+
+        .contact-hero h1 {
+            font-size: 3em;
+            color: var(--pastel-pink-dark);
+            margin-bottom: 5px;
+        }
+
+        .contact-hero p {
+            font-style: italic;
+            color: #666;
+            margin-top: 0;
+        }
+
+        /* Main Content Grid */
+        .contact-content {
+            display: flex;
+            padding: 40px 30px;
+            gap: 40px;
+            background-color: var(--background);
+        }
+
+        /* Left Column: Info Blocks & Map */
+        .contact-info-col {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .info-block {
+            background-color: var(--pastel-pink-hover);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--pastel-pink-light);
+            cursor: pointer;
+            transform: scale(1);
+        }
+
+        .info-block:hover {
+            background-color: var(--pastel-pink-light);
+            transform: scale(1.02);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-icon {
+            font-size: 24px;
+            color: var(--pastel-pink-medium);
+            margin-bottom: 10px;
+        }
+
+        .info-block p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .info-block span {
+            font-weight: bold;
+            display: block;
+            color: var(--pastel-pink-dark);
+            margin-top: 5px;
+        }
+
+        /* --- SOCIAL MEDIA STYLES --- */
+        .social-media-section {
+            text-align: center;
+            padding: 20px 0 30px;
+            border-bottom: 1px solid var(--pastel-pink-light);
+            margin-bottom: 30px;
+        }
+
+        .social-media-section h3 {
+            color: var(--pastel-pink-dark);
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .social-icons a {
+            text-decoration: none;
+            font-size: 30px;
+            margin: 0 10px;
+            /* Default color for all icons */
+            color: var(--pastel-pink-medium);
+            display: inline-block;
+            transition: transform 0.3s ease, color 0.3s ease;
+            /* Make text look like a bold icon */
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            border-radius: 50%;
+            /* Attempt to make the placeholder look circular */
+            width: 35px;
+            height: 35px;
+            line-height: 35px;
+        }
+
+        .social-icons a:hover {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        /* --- MAP STYLES --- */
+        .map-placeholder {
+            height: 250px;
+            background-color: #e0e0e0;
+            border: 1px solid var(--form-border);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Right Column: Contact Form */
+        .contact-form-col {
+            flex: 1;
+        }
+
+        .form-heading h2 {
+            color: var(--pastel-pink-dark);
+            font-size: 2em;
+            margin-top: 0;
+        }
+
+        .form-heading p {
+            color: #777;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--form-border);
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-btn {
+            background-color: var(--button-color);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            transform: translateY(0);
+        }
+
+        .submit-btn:hover {
+            background-color: var(--pastel-pink-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Footer Section */
+        .footer {
+            background-color: #333;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .footer-grid {
+            display: flex;
+            justify-content: space-around;
+            max-width: 900px;
+            margin: 0 auto 20px;
+            text-align: left;
+            padding: 20px 0;
+            border-bottom: 1px solid #555;
+        }
+
+        .footer-grid div {
+            flex: 1;
+            min-width: 150px;
+            padding: 0 10px;
+        }
+
+        .footer h3 {
+            color: var(--pastel-pink-medium);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .footer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer ul li a {
+            color: #ccc;
+            text-decoration: none;
+            line-height: 2;
+        }
+
+        .footer ul li a:hover {
+            color: var(--pastel-pink-medium);
+            text-decoration: underline;
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 0.85em;
+            color: #aaa;
+        }
+
+        /* Keyframes */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 850px) {
+            .contact-content {
+                flex-direction: column;
+            }
+
+            .contact-form-col {
+                order: -1;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                padding: 15px 10px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                margin: 10px 0;
+            }
+
+            .order-btn {
+                margin-top: 10px;
+            }
+
+            .contact-hero h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="logo">Sweet Delights</div>
+            <ul class="nav-links">
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/index.html">Home</a></li>
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/menu.html">Menu</a></li>
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/gallery.html">Gallery</a></li>
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/about.html">About</a></li>
+                <li><a href="contact.html" class="active-link">Contact</a></li>
+            </ul>
+            <a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/order.html" class="order-btn"
+                class="order-btn">Order Online Now</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="contact-hero">
+            <div class="hero-overlay">
+                <h1>Contact Us</h1>
+                <p>Have a big dream, a custom cake request, or just a yearning for wholesale details? Our team is
+                    standing by with flour-dusted hands, ready to help turn your ideas into delicious realities. Drop us
+                    a line—we promise a response sweeter than our buttercream!</p>
+            </div>
+        </div>
+
+        <div class="contact-content">
+
+            <div class="contact-info-col">
+                <div class="info-grid">
+
+                    <div class="info-block transition-ease">
+                        <div class="info-icon">📞</div>
+                        <p>Phone</p>
+                        <span>123-456-789</span>
+                    </div>
+
+                    <div class="info-block transition-ease">
+                        <div class="info-icon">📱</div>
+                        <p>Whatsapp</p>
+                        <span>082-123-234-345</span>
+                    </div>
+
+                    <div class="info-block transition-ease">
+                        <div class="info-icon">📧</div>
+                        <p>Email</p>
+                        <span>support@yoursite.com</span>
+                    </div>
+
+                    <div class="info-block transition-ease">
+                        <div class="info-icon">📍</div>
+                        <p>Our Shop</p>
+                        <span>2443 West Lane Market,45065</span>
+                    </div>
+                </div>
+
+                <div class="social-media-section">
+                    <h3>Follow Us Online</h3>
+                    <div class="social-icons">
+                        <a href="#" class="transition-ease" title="Facebook" style="color: #4267B2;">F</a>
+
+                        <a href="#" class="transition-ease" title="Instagram" style="color: #E1306C;">I</a>
+
+                        <a href="#" class="transition-ease" title="Twitter/X" style="color: #000000;">X</a>
+
+                        <a href="#" class="transition-ease" title="Pinterest" style="color: #E60023;">P</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form-col">
+                <div class="form-heading">
+                    <h2>Get In Touch</h2>
+                    <p>Connect with the Sweet Delights team. Whether it's a question or a happy thought, drop us a line!
+                    </p>
+                </div>
+
+                <form id="contactForm" style="padding: 0;">
+
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder="Your Name..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder="Your Email..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" id="subject" name="subject" placeholder="Subject...">
+                    </div>
+
+                    <div class="form-group">
+                        <textarea id="message" name="message" placeholder="Message..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="submit-btn transition-ease">Send Now</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <div class="footer-grid">
+            <div>
+                <div class="logo" style="color: white; margin-bottom: 10px;">SWEET DELIGHTS</div>
+                <p style="color: #ccc; font-size: 0.9em; line-height: 1.5;">Let's Bake Something Sweet Together.</p>
+            </div>
+
+            <div>
+                <h3>Our Store</h3>
+                <ul style="color: #ccc;">
+                    <li>2443 West Lane Market,45065</li>
+                    <li>207-8767-452</li>
+                    <li>support@site.com</li>
+                </ul>
+            </div>
+
+            <div>
+                <h3>Further Links</h3>
+                <ul>
+                    <li><a href="#">Term & Condition</a></li>
+                    <li><a href="#">News</a></li>
+                    <li><a href="#">Learning</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <p class="copyright">Copyright © 2023 Sweet Delights. All rights reserved.</p>
+    </div>
+
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('http://localhost:3000/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('Message sent successfully!');
+                    this.reset();
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while sending the message.');
+            }
+        });
+    </script>
+</body>
+
+</html>

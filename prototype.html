@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Sweet Delights Bakery App</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Roboto:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#D98095", // Unifying around the Home/Menu rose pink
+                        "primary-hover": "#c06b7f",
+                        "primary-dark": "#b55a6a",
+                        "background-light": "#FFF0F3", 
+                        "background-dark": "#1F1F1F", 
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#2D2D2D",
+                        "text-light": "#4A3B40",
+                        "text-dark": "#F9E6EB",
+                        "card-light": "#FFFFFF",
+                        "card-dark": "#27272a",
+                        "card-pink": "#fcedef",
+                        "card-pink-dark": "#3d2b2e",
+                    },
+                    fontFamily: {
+                        display: ["Playfair Display", "serif"],
+                        body: ["Roboto", "sans-serif"],
+                        sans: ["Plus Jakarta Sans", "sans-serif"], // Per theme instructions
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                },
+            },
+        };
+    </script>
+
+    <!-- React Dependencies -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/history@5/umd/history.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #D98095; border-radius: 4px; }
+        
+        /* Utility */
+        .menu-leader {
+            flex-grow: 1;
+            border-bottom: 2px dotted #D98095;
+            margin: 0 0.5rem;
+            position: relative;
+            top: -5px;
+            opacity: 0.5;
+        }
+        .dark .menu-leader { border-bottom-color: #fca5b5; opacity: 0.3; }
+        
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
+        body { min-height: 100vh; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark transition-colors duration-300 font-body antialiased">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { createRoot } = ReactDOM;
+        const { MemoryRouter, Routes, Route, Link, useNavigate, useLocation } = ReactRouterDOM;
+
+        // --- Shared Components ---
+
+        const Navbar = () => {
+            const [isOpen, setIsOpen] = useState(false);
+            const navigate = useNavigate();
+            const location = useLocation();
+            
+            // Dark Mode Toggle Logic
+            const toggleDarkMode = () => {
+                document.documentElement.classList.toggle('dark');
+            };
+
+            const isActive = (path) => location.pathname === path ? "text-primary font-bold" : "text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary";
+
+            return (
+                <nav className="sticky top-0 z-50 bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-sm shadow-sm border-b border-primary/10">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between items-center h-16">
+                            <Link to="/" className="flex-shrink-0 flex items-center cursor-pointer">
+                                <span className="font-display font-bold text-2xl text-primary">Sweet Delights</span>
+                            </Link>
+
+                            {/* Desktop Nav */}
+                            <div className="hidden md:flex space-x-8 items-center text-sm font-medium">
+                                <Link to="/" className={`${isActive('/')} transition-colors uppercase tracking-wide`}>Home</Link>
+                                <Link to="/menu" className={`${isActive('/menu')} transition-colors uppercase tracking-wide`}>Menu</Link>
+                                <Link to="/gallery" className={`${isActive('/gallery')} transition-colors uppercase tracking-wide`}>Gallery</Link>
+                                <Link to="/about" className={`${isActive('/about')} transition-colors uppercase tracking-wide`}>About</Link>
+                                <Link to="/contact" className={`${isActive('/contact')} transition-colors uppercase tracking-wide`}>Contact</Link>
+                                
+                                <button onClick={toggleDarkMode} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+                                    <span className="material-icons-outlined text-gray-600 dark:text-gray-300 text-xl">dark_mode</span>
+                                </button>
+                                
+                                <Link to="/order" className="bg-primary hover:bg-primary-hover text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider shadow-md transition-transform transform hover:scale-105">
+                                    Order Online
+                                </Link>
+                            </div>
+
+                            {/* Mobile Menu Button */}
+                            <div className="flex items-center md:hidden space-x-4">
+                                <button onClick={toggleDarkMode} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+                                    <span className="material-icons-outlined text-gray-600 dark:text-gray-300 text-xl">dark_mode</span>
+                                </button>
+                                <button onClick={() => setIsOpen(!isOpen)} className="text-primary focus:outline-none">
+                                    <span className="material-icons text-3xl">{isOpen ? 'close' : 'menu'}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Mobile Menu */}
+                    {isOpen && (
+                        <div className="md:hidden bg-surface-light dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 absolute w-full shadow-lg">
+                            <div className="px-4 pt-2 pb-6 space-y-2 flex flex-col items-center">
+                                <Link to="/" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium hover:text-primary">Home</Link>
+                                <Link to="/menu" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium hover:text-primary">Menu</Link>
+                                <Link to="/gallery" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium hover:text-primary">Gallery</Link>
+                                <Link to="/about" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium hover:text-primary">About</Link>
+                                <Link to="/contact" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium hover:text-primary">Contact</Link>
+                                <Link to="/order" onClick={() => setIsOpen(false)} className="mt-4 bg-primary text-white px-8 py-3 rounded-full font-bold uppercase text-sm shadow-md">
+                                    Order Online
+                                </Link>
+                            </div>
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        const Footer = () => (
+            <footer className="bg-primary text-white py-8 px-6 text-center dark:bg-zinc-900 dark:border-t dark:border-zinc-800">
+                <h4 className="font-display text-2xl font-bold mb-6">Sweet Delights</h4>
+                <div className="flex justify-center space-x-6 mb-8">
+                    <Link to="/" className="hover:text-pink-100 transition"><span className="material-icons">home</span></Link>
+                    <Link to="/contact" className="hover:text-pink-100 transition"><span className="material-icons">email</span></Link>
+                    <Link to="/contact" className="hover:text-pink-100 transition"><span className="material-icons">place</span></Link>
+                </div>
+                <div className="text-xs opacity-80 font-light">
+                    <p className="mb-2">© 2025 Sweet Delights Bakery</p>
+                    <p>Baked with Love & Sugar.</p>
+                </div>
+            </footer>
+        );
+
+        // --- Pages ---
+
+        const HomePage = () => {
+            return (
+                <div className="animate-fade-in-up">
+                    <header className="relative overflow-hidden py-12 px-6 text-center">
+                        <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-30 pointer-events-none">
+                            <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary rounded-full blur-3xl opacity-20"></div>
+                            <div className="absolute top-40 -left-10 w-48 h-48 bg-pink-300 rounded-full blur-3xl opacity-20"></div>
+                        </div>
+                        <h1 className="font-display text-5xl font-bold text-gray-800 dark:text-gray-100 mb-2">Delight in</h1>
+                        <h2 className="font-display text-4xl font-bold text-gray-700 dark:text-gray-200 mb-4 italic">Every Bite!</h2>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-8 max-w-xs mx-auto">
+                            Baking the World a Happier Place!
+                        </p>
+                        <Link to="/order" className="inline-block bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded text-xs font-bold tracking-widest shadow-lg uppercase transition-all mb-10">
+                            Order Today
+                        </Link>
+                        <div className="grid grid-cols-3 gap-3 max-w-lg mx-auto">
+                            <div className="aspect-square rounded-lg overflow-hidden shadow-md">
+                                <img alt="Red Velvet Cake Slice" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8jcen72fdhxqiareGb_XD2sYPGh_jJ51cwtvfWaJaU-Xp86GwDz_DY9QJc8OfDxIVVTEZaZBHTvv_XQ5Lg6U_IIWtwL07jO-bXvZRqt_URhA0OufXnXVWALk9JNcAab2-IDg9IEIKaBq0Nj8fgQiHEzapTlVLrYGYO_bKY-1na8-KRwFljVoYux34ohvgZBLj-dZ7xPeQ309XgJcWxjr8ju8nEjRwrKGcvevJxwOp_yOwAfIcrmFDDOTe0hS8LSPceOKgODAge94"/>
+                            </div>
+                            <div className="aspect-square rounded-lg overflow-hidden shadow-md">
+                                <img alt="Vanilla Layer Cake" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApTQt5Jn_xgQMXSvp39p3NkulawFN9BNnDXvnzaoKq8VculDfaVXprTs2C46tMkjMtLiK3u0DXQc4EvC-0BVjyG8AYqFe075FMiDsWVBKPszgQZ1azVHP66c3a6_zMiiug6pCuCmvPN8yuW1jN3TYd52hB7HOtKArrlOeP-Mwoo1nw6GvHFoJDh_jdHD66KCNmzWAnd1oK8_NoVcW63sbjg7rN-uyCEjmWgLoxG3Y-IQ33Bn6riV5C6UpUR01_1UETAVTvyu_4l4Y"/>
+                            </div>
+                            <div className="aspect-square rounded-lg overflow-hidden shadow-md">
+                                <img alt="Chocolate Raspberry Cake" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzHrrpNQ-qXEXV6r8Yb4lgvqBrYP0LZuXY1OogjY8CXs78ImsCESwvTT9OsKJky8aR_4a9AmKjd_C1pPsK3H_16CnLFBWg6Lt5S7zWG7ckB1Dsiyc6Da566cNq-D27JwNxLX5Fna3IhZXMoSMvqTE84YYyR1uc4JgZJwlww8fCxI8QpjSlsqDtFKDBJCIRlR1mx5rxV_O4W_2qq1g14SnclKrb5zzDaJKuR4x8n8yEg8gd4fJBeq7yUG2hk_oM-A_vj4tV_r50Fzg"/>
+                            </div>
+                        </div>
+                    </header>
+
+                    <section className="py-12 px-6">
+                        <h2 className="font-display text-3xl font-bold text-center text-gray-800 dark:text-white mb-10">Delight in every Bite!</h2>
+                        <div className="space-y-8 max-w-lg mx-auto">
+                            <div className="bg-surface-light dark:bg-surface-dark rounded-xl shadow-lg p-6 text-center transform transition duration-300 hover:-translate-y-1">
+                                <div className="rounded-lg overflow-hidden mb-4 h-48">
+                                    <img alt="Custom Cake" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvqWUS3b5hd32L6CRcm0OjNdInn1tmjPUNavWR4wIrYAXL0LRS4vlIieeaLKaY8TFl6DhlQbY1PpC0JZJalEslUQ2kqLFRjpNaXG9G7FdBALcKB9OrI-F0dJb9IYNYkE_q62fm_hXbTFtDRJFCrJDtfJcCElm5eqvHTAMSB5RaW6ZqevLezEHhf2YVs8AmHT_3248KNUFiWJNAJhYr5sWjgYexmlO5ECccKeYZuIo_YbhA4KNPjkqsP1O7AUS-6o3gegKijveMQe8"/>
+                                </div>
+                                <h3 className="font-display text-xl font-bold text-gray-800 dark:text-white mb-2">Custom Cakes</h3>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 mb-6">Baked for Your Moments.</p>
+                                <Link to="/order" className="border border-primary text-primary hover:bg-primary hover:text-white dark:text-primary dark:hover:text-white dark:border-primary px-6 py-2 rounded text-xs font-bold uppercase transition-colors inline-block">
+                                    Order Today
+                                </Link>
+                            </div>
+                            <div className="bg-surface-light dark:bg-surface-dark rounded-xl shadow-lg p-6 text-center transform transition duration-300 hover:-translate-y-1">
+                                <div className="rounded-lg overflow-hidden mb-4 h-48">
+                                    <img alt="Pink Macaroons Stack" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUz11M-0OsCpthgAP4h-2xoA01ySvq1FWm21yKfILfx_76SqPMbDu9nWl_BseCVC8YZnEIbruUPKckPOcKK3yJRzUbEMwbXEMyQ2MX6JmUIEtxEWNS5mNeRChDbrARvLuVN6AFbpNOBU45K26W2RTmbwq0572e48Jwtzsoguk03sUrOFzHlpQd03ecZn-xru_VxLQCN8hPpNfqY9HKOpI7QqPfsRxxKQ3F30ec8OLIq0yVF3c6vfgRa_yMh2GtjUQOsQNCrx0yJXY"/>
+                                </div>
+                                <h3 className="font-display text-xl font-bold text-gray-800 dark:text-white mb-2">Macaroons</h3>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 mb-6">Rainbows of Flavor, Perfectly Popped.</p>
+                                <Link to="/order" className="border border-primary text-primary hover:bg-primary hover:text-white dark:text-primary dark:hover:text-white dark:border-primary px-6 py-2 rounded text-xs font-bold uppercase transition-colors inline-block">
+                                    Order Today
+                                </Link>
+                            </div>
+                            <div className="bg-surface-light dark:bg-surface-dark rounded-xl shadow-lg p-6 text-center transform transition duration-300 hover:-translate-y-1">
+                                <div className="rounded-lg overflow-hidden mb-4 h-48">
+                                    <img alt="Box of pink cupcakes" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCErfNC6po8A1bfJeSOSh7MlBcZdkSvSSdsK3S3fC0uhrcPMuhs_0hnU5LFiP3_BCHG9aK-DAQcRJnE1TsQ0EhjMmwB2QQzBhkw_Uddpj4U3sncaPtwJG_zTFVO1bW_b4e1bR0UC-KzPGm6oeYBqmVuBwewivCioJ95OQ25AwWqcevqpVal-fZM89FJ1NQKQSgzaySEzE0VmFZnBMolZXodppBQQKto4l3HiVip7UXLNHbospplRMKTH1dcVWedNqtWby8WwPTsGb0"/>
+                                </div>
+                                <h3 className="font-display text-xl font-bold text-gray-800 dark:text-white mb-2">Cupcake Collections</h3>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 mb-6">Just Add Sprinkles & Smile.</p>
+                                <Link to="/order" className="border border-primary text-primary hover:bg-primary hover:text-white dark:text-primary dark:hover:text-white dark:border-primary px-6 py-2 rounded text-xs font-bold uppercase transition-colors inline-block">
+                                    Order Today
+                                </Link>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="py-12 px-6 bg-white dark:bg-surface-dark/50">
+                        <h2 className="font-display text-3xl font-bold text-center text-primary mb-10 italic">Custom Collection</h2>
+                        <div className="grid gap-6 max-w-lg mx-auto">
+                            <div className="bg-[#F3E5E8] dark:bg-zinc-800 p-8 rounded-lg text-center shadow-sm flex flex-col justify-center items-center h-64">
+                                <h3 className="font-display text-2xl font-bold text-primary mb-2">Holiday</h3>
+                                <p className="font-display text-3xl font-bold text-primary mb-6">- 20% OFF</p>
+                                <Link to="/order" className="bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded text-xs font-bold uppercase transition-colors shadow-md">
+                                    Order Today
+                                </Link>
+                            </div>
+                            <div className="rounded-lg overflow-hidden shadow-lg h-64 relative group">
+                                <img alt="Assorted Chocolate Cupcakes" className="w-full h-full object-cover transition duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAR_GoNKCDSDCkxu06xH9n_LrK5bjFFE5RVNn7wfoJ5q5-XFGAjc7EiMZ-5aUFvM6aYfsiNlT88ZThLbk8Tv9X4dLTWwtGffsMnW8S-raSHJ201d3Z656A9LoD7SIWqbzqxdpX7wVl4RcF9Hnv2l37YNElKYOch07_gPWy3VePxfQGgEKOPd3ZaI0MI-obYFZNy9Mgmw41KJSfOlTeCWOOVyros7spqxuV7Du-bURiFuQfQVeX-bonpgM0QcVt554m5WXuW5DgrN1A"/>
+                                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                                <div className="absolute bottom-0 left-0 right-0 bg-primary py-2 text-center">
+                                    <Link to="/order" className="text-white font-bold text-xs uppercase block w-full">Order Today</Link>
+                                </div>
+                            </div>
+                            <div className="bg-primary dark:bg-primary/90 p-8 rounded-lg text-center shadow-sm flex flex-col justify-center items-center h-64 text-white">
+                                <h3 className="font-display text-2xl font-bold mb-1">Holiday Collection</h3>
+                                <p className="text-xs italic mb-4 opacity-90">Sweet & Decadent Treats</p>
+                                <p className="font-display text-4xl font-bold mb-6">$5 OFF</p>
+                                <Link to="/order" className="bg-white text-primary hover:bg-gray-100 px-6 py-2 rounded text-xs font-bold uppercase transition-colors shadow-md">
+                                    Order Now
+                                </Link>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section className="py-16 px-6 text-center">
+                        <h2 className="font-display text-3xl font-bold text-primary mb-2">About Sweet Delights Bakery</h2>
+                        <div className="h-1 w-24 bg-primary mx-auto mb-6 rounded-full opacity-50"></div>
+                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm mb-6 max-w-2xl mx-auto">
+                            Welcome to <span className="font-bold text-primary">Sweet Delights</span> — where every bite is made with love and a sprinkle of blush-colored joy! We specialize in handcrafted cakes, cupcakes, and pastries that bring sweetness and style to your celebrations.
+                        </p>
+                        <Link to="/about" className="text-primary font-bold underline decoration-primary decoration-2 underline-offset-4 text-sm hover:text-primary-hover">Read More</Link>
+                    </section>
+                    
+                    <Footer />
+                </div>
+            );
+        };
+
+        const MenuPage = () => {
+            const MenuSection = ({ icon, title, items }) => (
+                <section>
+                    <div className="bg-primary text-white py-2 px-4 rounded-md flex items-center mb-6 shadow-md">
+                        <span className="material-icons-outlined mr-3">{icon}</span>
+                        <h2 className="font-display text-xl font-bold tracking-wider uppercase">{title}</h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                        {items[0].image && (
+                            <div className={`relative h-64 md:h-80 rounded-xl overflow-hidden shadow-md group ${items[0].orderClass}`}>
+                                <img alt={title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src={items[0].image} />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                            </div>
+                        )}
+                        <div className={`space-y-3 ${items[0].listClass}`}>
+                            <div className="flex justify-between text-xs font-bold text-primary uppercase tracking-widest border-b border-pink-200 dark:border-zinc-600 pb-2 mb-4">
+                                <span>Item</span>
+                                <span>Price</span>
+                            </div>
+                            {items.slice(1).map((item, idx) => (
+                                <div key={idx} className="flex items-end justify-between text-sm sm:text-base">
+                                    <span className="font-medium">{item.name}</span>
+                                    <span className="menu-leader"></span>
+                                    <span className="font-bold text-primary">{item.price}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            );
+
+            return (
+                <main className="max-w-5xl mx-auto px-4 py-8 sm:px-6 lg:px-8 animate-fade-in-up">
+                    <div className="bg-card-light dark:bg-card-dark rounded-2xl shadow-xl overflow-hidden border border-pink-50 dark:border-zinc-700">
+                        <div className="relative bg-pink-50 dark:bg-zinc-800 py-10 px-6 text-center border-b border-pink-100 dark:border-zinc-700">
+                            <div className="inline-block relative">
+                                <div className="absolute inset-0 bg-white dark:bg-zinc-700 opacity-50 transform rotate-1 rounded-sm"></div>
+                                <div className="relative bg-white dark:bg-zinc-700 px-8 py-3 shadow-sm border border-pink-100 dark:border-zinc-600 rounded-sm">
+                                    <h1 className="font-display text-2xl md:text-4xl font-bold text-primary tracking-wide">
+                                        Our Signature Sweet Selection
+                                    </h1>
+                                </div>
+                            </div>
+                            <p className="mt-4 text-sm text-gray-500 dark:text-gray-400 italic font-display">Handcrafted with love and the finest ingredients</p>
+                        </div>
+                        <div className="p-4 sm:p-8 space-y-12">
+                            <MenuSection 
+                                icon="cake" title="Cakes" 
+                                items={[
+                                    { image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBvnuhUAVu7Zm8QSfexqLldcRIFmvJ7iNq4JXM8K4bi8nsXmRAThDGpvI5QFL3D_mNSL543xWP06Ih6nRhNtjSlG2ZemoBz7qAOp6aX5p1KRIbhL2nlSRMIfiNyhGlEKpad3w4Sdw5_Ep-M_T_rxSH_ikn-NXL0UFklChMjiPzDOmTzeJdNVzJFbREsB0EiVpz9tyjQ3NVyZZdzXJQ4EseFZLkDXWem4V-NV_WeduQ29SsoXATDxkyBtHzGd280B7MsjGBhLQv-BsI" },
+                                    { name: "Devil's Delight", price: "600" },
+                                    { name: "Waffle Chocolate", price: "700" },
+                                    { name: "Black Forest", price: "800" },
+                                    { name: "Rosette Cake", price: "850" },
+                                    { name: "Dutch Chocolate", price: "890" },
+                                    { name: "Chocolate Truffle", price: "900" },
+                                    { name: "Oreo Cake", price: "900" },
+                                ]} 
+                            />
+                            <MenuSection 
+                                icon="emoji_food_beverage" title="Cupcakes" 
+                                items={[
+                                    { image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBT-KnBttu05cTPGJ7L4h-BIjvhluAbJjtY2MXeSxBn-i2cv9psuDXt8EB00n_4RBwAADuSGmtjaN75yJ50vEh4Mk0XyDBCZEVqrLDXr_JaYJMT6itBno1601hZskSHjFQWrF-qvGFwEVsr_GivCwaT-NEyEjIJ6JYjhyrcpWhf53RiTucUV8CgEtui6FTgGc11tzvROfZmMV7-GidBpGeNIDXT2d8XVUH-dx7qoTk5Q27G0y23gs5w5tITXg2E-yCz5han5rb6wyM", orderClass: "md:order-2", listClass: "md:order-1" },
+                                    { name: "Devil's Delight", price: "50" },
+                                    { name: "Smiley", price: "55" },
+                                    { name: "Waffle Chocolate", price: "70" },
+                                    { name: "Pineapple", price: "40" },
+                                    { name: "Black Forest", price: "75" },
+                                    { name: "Rosette", price: "45" },
+                                    { name: "Dutch Chocolate", price: "50" },
+                                    { name: "Oreo", price: "65" },
+                                ]} 
+                            />
+                            <MenuSection 
+                                icon="cookie" title="Cookies & Macarons" 
+                                items={[
+                                    { image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBx_Z4dwhp3aVukZ0ZuUuwU8266uhiWQXirInD_wMCUrtwvWfGr5F2OO62UWcTxMN5CGJ9RYtGwZz2SBkBF32NyzSK-Lk_NqDt-x9kBNn5bzjz1Jh2KXGYuslbF2-nd0RRkBQQDaQHpunV462k7R3m_deZ_Te6hX7LZByNNeW37rmiiK3wEhxacB2_JJ2NS0QMLMt6yfb6aT5VKher2xp1-EUcz5bHfjklWM7-wz9eJHapdQWPGf75SPIIOQ_LSuqtbMXBPt9TE2z8" },
+                                    { name: "Chocolate Chip Cookie", price: "50" },
+                                    { name: "Snickerdoodle", price: "45" },
+                                    { name: "Oatmeal Raisin", price: "60" },
+                                    { name: "Almond Biscotti", price: "70" },
+                                    { name: "Red Velvet Macarons (6)", price: "250" },
+                                    { name: "Pistachio Macarons (6)", price: "400" },
+                                ]} 
+                            />
+                            <MenuSection 
+                                icon="bakery_dining" title="Small Pastries & Pies" 
+                                items={[
+                                    { image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB4m-bVUDicU_UQYFo4syoQkVYoo6sNiaRyTawyK875nO6_uQZLBPU27721pkYU-TEU1DVNgeNiOtmaoXm1L-zPULsjxfXWrrD4O_NE9Nnb8VIG0SAfA1CQdQ-gshrozqWA0Jp0D6Nrm62TLA1yGDzNtGP1eZW-Tx4sIe6syzb4pw_sidpBxftu-szB-mxqaw79PvYwksJyoBKtE2cDK3NVh7iVXvzoIon9Te5l3V_14ZqBhszA0y3uXBVbe1NbMJYHsfgdHbccsq4", orderClass: "md:order-2", listClass: "md:order-1" },
+                                    { name: "Cannoli", price: "50" },
+                                    { name: "Eclair", price: "60" },
+                                    { name: "Cinnamon Roll", price: "110" },
+                                    { name: "Plain Croissant", price: "40" },
+                                    { name: "Pie Slice: Cherry", price: "100" },
+                                    { name: "Pie Slice: Blueberry", price: "120" },
+                                    { name: "Lemon Tartlet", price: "50" },
+                                ]} 
+                            />
+                        </div>
+                        <div className="bg-pink-50 dark:bg-zinc-800 p-6 text-center border-t border-pink-100 dark:border-zinc-700">
+                            <p className="font-display text-lg mb-4">Craving something specific?</p>
+                            <Link to="/order" className="inline-block bg-primary hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:-translate-y-1">
+                                Customize Your Order
+                            </Link>
+                        </div>
+                    </div>
+                    <Footer />
+                </main>
+            );
+        };
+
+        const GalleryPage = () => {
+            const GallerySection = ({ title, icon, images }) => (
+                <section className="mb-16">
+                    <div className="flex items-center justify-center mb-8 gap-3">
+                        <span className="material-icons text-primary text-3xl">{icon}</span>
+                        <h2 className="font-display text-3xl font-bold text-text-light dark:text-white">{title}</h2>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                        {images.map((img, idx) => (
+                            <div key={idx} className="group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300 bg-card-light dark:bg-card-dark">
+                                <div className="aspect-square overflow-hidden">
+                                    <img alt={title} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" src={img.src} />
+                                </div>
+                                {img.label && (
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                        <span className="text-white font-display text-lg tracking-wide border-b-2 border-primary pb-1">{img.label}</span>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+
+            return (
+                <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 animate-fade-in-up">
+                    <div className="text-center mb-12">
+                        <h1 className="font-display text-4xl md:text-5xl font-bold text-primary mb-4">Our Sweet Collections</h1>
+                        <div className="h-1 w-24 bg-primary mx-auto rounded-full opacity-60"></div>
+                        <p className="mt-4 text-text-light/70 dark:text-gray-400 max-w-2xl mx-auto">
+                            Discover the artistry in every bite. From custom cakes to delicate macarons, browse our gallery of handcrafted creations.
+                        </p>
+                    </div>
+
+                    <GallerySection title="Cakes" icon="cake" images={[
+                        {src: "https://lh3.googleusercontent.com/aida-public/AB6AXuA5J0T36UOGCaj8ZG-vUPWh-cvminZ-jpx48haMc8lnUFkVYBEnpcCXK49kL6zo6Epc7yRexP4vVqr7t9_jCqRFo3ZghznUyHuEFSTb8FjtuiJHZb5bEMrCgf95L01AyR8tsBLCZh8VcUW9cnKUiNbljrHWHzud_WqIkuguDoZcfAkq82s196x5AurGerWBwAJer7QVEGbrxmWSzkwYlRnGkZdNbg4lEjfwTpT9DjISs6Q0VVUuuji5PAhPpUYESqhhL_OjMuq5QlI", label: "Chocolate Drip"},
+                        {src: "https://lh3.googleusercontent.com/aida-public/AB6AXuBIEOcvh6gjIHXURF_7u2ztGYDpKB4cVfdMI4cB-Q0xUO98vJbZ6TabNwzPToZsW5UHGLtHc0Ku51xBRHwKw5sWoezk02CPyDh6iwGxAZibi1S8Lw17LfRYft30STRamFHc9N9xWGVXe9yj0LzMdBiA8q886PZCiRlZo7PmONTNtvg-mNx-3343IO25RNMr26_QdWJzaG5sA7gDBIcdn4ugHLQ_gFo2tnMBTJKtbckzasDQHA7Nd4WVo2RcqNyCaFNLcFioKPE5w5w", label: "Vanilla Berry"},
+                        {src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDm3Gfknqm4vuPPwdWAhuNXVddFM6zWsOvIBpE9R1sv4LkpF93V6oFVbI62-xZx362dmYwTswY4ACD0OWsLkavOwhk_0yT-h8r24eK4EU60a5M6DTQZznUgKPj3hwPI6ut7Gb549kdiuMHDFJ5jseoe2mtTt26TI-863lHVoNpcGwkV9723TyUfCAshbOn42cuWZ7kgHFAnG291uH_heJKq6M9wSLEyWRTm9HF-yI7ibFjnN369rtpRA2HRCnNCDiAhmZ-vd778mh0", label: "Rose Elegance"},
+                        {src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDAr9UEa9xSXIBoq3-UtfzDupJNlN8RbzgFtiKhKKTbcvkXtmbtOvbk97Moa4EKbY9VuhYs_uUEBYOKAmRkF5ijXyIPnSbbzPBtsR4lOtDQ9YlWHDS3E9-AqWTVVQTFhvyYNw3TiXbe7RGTdo0gqXQ8m_0stQvzidEhyyKfC3BVPJpRfUXiWN3aYpsHuKgVpgy06Iojg_BvxjecGwLtIN32Xq-FmGipYAFZHym6eO07M58qhD7KC8kbEbN_xuoneNAv9oTkULElVOk", label: "Floral Fantasy"}
+                    ]} />
+
+                    <GallerySection title="Cupcakes" icon="emoji_food_beverage" images={[
+                        {src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDRopGlMAFP_2hHHaXiSteO_j-sMpuQw3T_lb7EPHv96dWUwmDnDkWlCfipPL7X3mVNvLP88WtFfRp8QJG2sxgJlhbCFxmopfbMxmVQQsOLWaLRLRiNrIuXFCF24tQHv32fK_ijK5PZVPbt572UA-82sRNWNsThY1TNpublJnm_n3lWDCptgIJqPxVgHG411xK7jTnjL42l_NlT8VRG-TWQEc-sfgUCcmamp_cllWiJxn_6GHI2vN-dflAmriOLQo-_zzoR3Pa_gcs"},
+                        {src: "https://lh3.googleusercontent.com/aida-public/AB6AXuAmjLf-Xp7HRazc3Lt53vtJyMDKqSqwd0GQUMPHoix2asTQLtczyyRuZokswABxmDNjm0mbmN9M5f_bMeGP4opY12L9ufqCILQptgL5ya7tIZLA-DsDGd5zASkSjqUpDiirc479Yfitou5_FuxFcL4alREqOZzH1_u1bSKoFrUoHXNxAD03u8EDRtVDBbIDrb4kg3CnQhyAshg27j7qsZVCHij3amvVqVTQncZRHridag1lmbqHV1VR_6OMSf_eizYpyXOMV-H0MBU"},
+                        {src: "https://lh3.googleusercontent.com/aida-public/AB6AXuAhk32wy9TWpjSulK9F7ZiwpLN7YGjJdjt7UWPm3tIs6ixZYsLdVFqBOOxM485uC-k9Q1Tyw8-xGLliM-xg64Fh19bT4B0tPTFyoPB1CEI4xrxF73Eo70xpwsLeN2AwCdjLElygpf_tDJIEkbsSHbWrwoyDZeqxOzAacJn_0eubCEkMMvRJL5k4yg-Ztzj-cKzUq4iMlxLE4T56Sao5YY9A32S5KPG-QO5U3IoEJJ9Nn2k6B9T7njC94AILjZYiVmyBsZFPjUlanLI"},
+                        {src: "https://lh3.googleusercontent.com/aida-public/AB6AXuCzz6u0UHX5XW59WcMefQ6NC24VPdUHiNFteYYf-ctP0yIq614OqjX-thIbsd8--xeOUTm-2FOc7Wxe3Zqs9SYC0R5c8mkW-5u4YIEbbwhZc41-dxCjlnR1qiLV4X8Bdad9tuQLc0Qbo2kdyT4yNaEEcOZM9r2Gz6zhvUBRDUNNWVKE7XxMc_qNs2xIN6Yh-aC39oZMCiQbj4QQm6kX9-SQnbdr6W_kl992uAeTdisZhi0BN2CmuRbj71qo3AN5D1OcJgDgRJVfruc"}
+                    ]} />
+
+                    <GallerySection title="Macaroons" icon="cookie" images={[
+                        {src: "https://lh3.googleusercontent.com/aida-public/AB6AXuCVJcxeQLgii9OBaamWfubuWMHLevhaaURtUQKWcrJUpfNbV6Kcr-Ytx4bYYPYIurgLrbBS90hi1D4g8FGfVLOaojTWC7oCFkFmjgihEqbbkNnkloGpdcsS17XWXgwTRP8kz8bLeV17Sovkdvty2qma5xdyxf81y0p_klJ7cMo_FJZgR9_j340rp-bTvqp1UQEHFEsMExbST9Brp6m9tAB1J__gJ9VY5eV7YZPEhnTVIDwn08LHA-quYY1mejpBlTh4_WlzQBTFHHQ"},
+                        {src: "https://lh3.googleusercontent.com/aida-public/AB6AXuB6sJb6a4x1X8CIslZUiL7wgFkx9vD8rLRkJH3H5jvq2NidsNJKtzPEQaWG185gQ7dl0FfItHu6-23xLHpfDHpIAaOC2MhxYqdu_TFOyCho0XciLS-HyPwQsIN4TdPMvvT01NODPY46j81N8wrio1vAzIPgY4jouZFAuJ6Ir53K3ONIbMPCE8ppqAh51Wbf31iuZ-ijYnISBOoCkfw_miYQQhkR8RdPFQiBHD0ayqoMBXc2JJNQQZbnmduF24KN5eRi2Zx-ECxWnGk"},
+                        {src: "https://lh3.googleusercontent.com/aida-public/AB6AXuCdT0uuPGAigkhn6ic7wfe1GTOnCFgQOorHSkeb2D3uyujXt3V_urcHAzf96lPxH7NSkezrfnD9tRCfLNPCv4vYxw3cvYAuSvj49lGTktGjl0P7_LF0-6UqiDCc92h42dNl9cIAZyUt3654y0taEgY-e8FKJPlO7FYRI_3S9d68qRwZwaAQaglHFhrEL5s0_hjcHWf1pvyaoW8Eup-Q92jv6iP6HqiYT4lqyd49njcqbx4SqsjSEbcfkgL2AaV-50560f95BbJ5VZ4"},
+                        {src: "https://lh3.googleusercontent.com/aida-public/AB6AXuCZbJTD9X2r_JK5bVTsW4AInqWhfcMUmPafbTcTu0nyNvvvJqfMgyN1z1LQhlE8rJK0zuZUVs6W6v_Z-xTWOYgT9HYwYct-b0l_jh06Ojh-S27KU0rjNLvggBha8qrsgq5nR9B2V4IkVeAWRg6uTur1NrEaFoey_gV2wZbIU93WwgP3XNjseb3r6Zdgn23KyrAwWAlJMs_upQN9l3jWwZSODFK4tLetMetEzPPK1YJvfDhoPMfYC-L0IqAhiZ-KCLS-eLr5XXiUAbw"}
+                    ]} />
+
+                    <Footer />
+                </main>
+            );
+        };
+
+        const AboutPage = () => {
+            return (
+                <main className="max-w-4xl mx-auto px-6 py-10 pb-20 space-y-12 animate-fade-in-up">
+                    <section className="text-center space-y-6">
+                        <h1 className="font-display text-4xl md:text-5xl font-bold text-primary leading-tight">
+                            About <br/><span className="text-primary">Sweet Delights Bakery</span>
+                        </h1>
+                        <div className="w-24 h-1 bg-primary mx-auto rounded-full opacity-60"></div>
+                    </section>
+                    <section className="space-y-6 text-center md:px-12">
+                        <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+                            Welcome to <strong className="text-primary font-bold">Sweet Delights</strong> — where every bite is made with love and a sprinkle of blush-colored joy! We specialize in handcrafted cakes, cupcakes, and pastries that bring sweetness and style to your celebrations.
+                        </p>
+                        <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+                            Our vision is to make your moments more memorable with delightful treats baked fresh daily. From soft pink frosting to creamy textures, every dessert we create reflects elegance, warmth, and care.
+                        </p>
+                    </section>
+                    <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                        {[
+                            {img: "https://lh3.googleusercontent.com/aida-public/AB6AXuB-K1qh2kfUfh1Ibd_dFvKqKhxkpbXwZ2TBI56OA8FL4qwbsYW4aUAZ5egDPZ1ruU6DJkMgLOZyVtlunXyjeknPsg1Nolc8oYg0UTVcO4_ikiblnb5e6P7EAHItq-C03TsnThKuE6xoVlqo3JsvQjQocRzrkQlGjeyzggLhXUiOkvb0-jaM-_CAF1Q3p5YjcP-ZUHWPzMiyPiSsEhe5uDQGpoHQPQ5D0P0KWqelnnynGQ8i4nRJMh8hkbTmx8Jcl_fm0mLhCO6xpA8", text: "Signature Cupcakes"},
+                            {img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAI_nkiR9MdIn7uGixZA35DChisgzxn8N_uEjqLvfVdSpFK06r_yQIq20sLBE-q7zmR_qPouMVEVXpFTxbmLSq09yJDK9DD8ixVPJJEDx-rf152TOwHo1s2tZLy27dVJDDbhBDSzKekMaHBFwnEfZOsbLK_abg76T5m2wyqKZ8ub2aiXvv4dICVYl07da0jtva3SpWXBT1MIdjBK__TLFWRTZslRv1F0vQn2Jv1n1iE6SN-eexcmDtwqn3Y192f52do3eC0IsSd5nk", text: "Custom Cakes"},
+                            {img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAViFML0u9RsqGacDXW6XxTXOs9uNBjOSKD6Nf2Pz1XwsjbMtixDbHBynCCTAaZqQuGQoqELVmQoEXpliG_3a5VGRX_9eAqXQOuR_X-LhwJEm56fj9p_jY_I_1vTMKgKTI7cQvl0Hu-f9R3Vr0a0LnaKDTULHzJEGVbFZbF0PnBdMd9iV6r5MwQYzPLcJ_jccpOj-zBvbH3mQMvb_Sr59NrP0cPeo4k2bbhAtUrQQpZWibHEj-CsJ8HnRLarZN5u9LE8N9XWuUdQQ8", text: "Daily Freshness"}
+                        ].map((item, idx) => (
+                            <div key={idx} className="group relative overflow-hidden rounded-xl shadow-lg dark:shadow-none bg-surface-light dark:bg-surface-dark transform transition duration-300 hover:scale-[1.02]">
+                                <div className="aspect-square w-full overflow-hidden">
+                                    <img alt={item.text} className="w-full h-full object-cover group-hover:opacity-90 transition-opacity duration-500" src={item.img}/>
+                                </div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+                                    <span className="text-white font-display text-lg tracking-wide">{item.text}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </section>
+                    <section className="flex justify-center pt-6">
+                        <Link to="/menu" className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-primary hover:bg-primary-dark transition-colors shadow-lg shadow-primary/30">
+                            Browse Menu
+                            <span className="material-icons ml-2 text-sm">arrow_forward</span>
+                        </Link>
+                    </section>
+                    <Footer />
+                </main>
+            );
+        };
+
+        const OrderPage = () => {
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                alert("Thank you for your order! We'll contact you shortly.");
+            };
+
+            return (
+                <main className="py-10 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto animate-fade-in-up">
+                    <div className="bg-card-light dark:bg-card-dark rounded-2xl shadow-xl p-6 sm:p-10 relative overflow-hidden border border-pink-50 dark:border-gray-800">
+                        <div className="text-center mb-10 relative z-10">
+                            <div className="mx-auto w-16 h-16 bg-pink-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 shadow-inner">
+                                <span className="material-icons text-3xl text-primary">cake</span>
+                            </div>
+                            <h2 className="text-primary font-display text-2xl font-bold mb-2">Sweet Delights</h2>
+                            <div className="inline-block bg-pink-50 dark:bg-zinc-800 px-6 py-2 rounded-lg border border-pink-200 dark:border-zinc-700 transform -rotate-1">
+                                <h1 className="font-display text-3xl sm:text-4xl text-primary font-bold">Order Your Delights</h1>
+                            </div>
+                        </div>
+                        <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+                            <div className="space-y-4">
+                                {['Name', 'Address', 'Mobile Number'].map((label, i) => (
+                                    <div key={i}>
+                                        <label className="block text-xs font-bold uppercase tracking-wider text-primary mb-1 ml-1">{label}:</label>
+                                        <input required type={label === 'Mobile Number' ? 'tel' : 'text'} className="block w-full rounded-lg border-pink-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-800 dark:text-gray-100 focus:border-primary focus:ring focus:ring-primary/20 transition-shadow sm:text-sm py-3" />
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="space-y-4 pt-4 border-t border-dashed border-pink-200 dark:border-gray-700">
+                                {['Cake Flavor', 'Cupcake Flavor', 'Bars/Pastries', 'Design Theme'].map((label, i) => (
+                                    <div key={i}>
+                                        <label className="block text-xs font-bold uppercase tracking-wider text-primary mb-1 ml-1">{label}:</label>
+                                        <input type="text" className="block w-full rounded-lg border-pink-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-800 dark:text-gray-100 focus:border-primary focus:ring focus:ring-primary/20 transition-shadow sm:text-sm py-3" />
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="pt-2">
+                                <label className="block text-xs font-bold uppercase tracking-wider text-primary mb-1 ml-1">Special Request:</label>
+                                <textarea rows="4" className="block w-full rounded-lg border-pink-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-800 dark:text-gray-100 focus:border-primary focus:ring focus:ring-primary/20 transition-shadow sm:text-sm py-3 resize-none"></textarea>
+                            </div>
+                            <div className="pt-6">
+                                <button type="submit" className="w-full bg-primary hover:bg-primary-hover text-white font-display font-bold text-lg py-4 rounded-xl shadow-lg transition-all transform hover:-translate-y-1">
+                                    PLACE ORDER
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div className="text-center py-6 text-gray-500 dark:text-gray-400 text-sm">
+                        <p>© 2025 Sweet Delights Bakery — Baked with Love & Sugar.</p>
+                    </div>
+                </main>
+            );
+        };
+
+        const ContactPage = () => {
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                alert("Message sent! We'll get back to you soon.");
+            };
+            return (
+                <div className="animate-fade-in-up">
+                    <header className="relative w-full h-[300px] md:h-[400px] flex items-center justify-center">
+                        <div className="absolute inset-0 z-0">
+                            <img alt="Background" className="w-full h-full object-cover opacity-90 dark:opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2OR2jNkRzyOnzSMdl6aytAVZbvvm-Z3HqRIjSE-5NbDcfHnRt3nv9__YMgv7ASRii2L-NP3mRev8-Xm-6kcLBlxxNC1clba6t_Vutci8LZeVFMj69v5di7qPB-kWLUAMPfoUpmkxb1keqpUhiNbzETMB1lK6RcNpswJmSzQI1GZGjlChSuk-COMMo7ga5EpWy1MDRt62YhQlxrkQiBcqwJxF6tDeAnXSHFBb6CFvcfUMdGt4PTCQmGCoa4hzZJHeKl_sd8UVGm3c"/>
+                            <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent dark:from-black/50"></div>
+                        </div>
+                        <div className="relative z-10 w-11/12 max-w-4xl bg-white/90 dark:bg-surface-dark/95 backdrop-blur-sm p-8 rounded-2xl shadow-xl text-center border-t-4 border-primary mt-10">
+                            <h1 className="text-4xl md:text-5xl font-display font-bold text-primary mb-4">Contact Us</h1>
+                            <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 italic max-w-2xl mx-auto font-display">
+                                Drop us a line—we promise a response sweeter than our buttercream!
+                            </p>
+                        </div>
+                    </header>
+                    <main className="max-w-7xl mx-auto px-4 py-16">
+                        <div className="flex flex-col lg:flex-row gap-12">
+                            <div className="w-full lg:w-5/12 space-y-8">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {[
+                                        {icon:'phone', title:'Phone', text:'123-456-789'},
+                                        {icon:'chat', title:'Whatsapp', text:'082-123-234-345'},
+                                        {icon:'email', title:'Email', text:'support@yoursite.com'},
+                                        {icon:'storefront', title:'Our Shop', text:'2443 West Lane Market'}
+                                    ].map((item, i) => (
+                                        <div key={i} className="bg-card-pink dark:bg-card-pink-dark border border-pink-100 dark:border-pink-900 rounded-xl p-6 flex flex-col items-center justify-center text-center shadow-sm">
+                                            <span className="material-icons text-primary text-3xl mb-3">{item.icon}</span>
+                                            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wide mb-1">{item.title}</h3>
+                                            <p className="text-primary font-bold break-all">{item.text}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="w-full lg:w-7/12">
+                                <div className="bg-surface-light dark:bg-surface-dark p-6 md:p-8 rounded-2xl shadow-lg border border-pink-50 dark:border-zinc-800">
+                                    <h2 className="text-3xl font-display font-bold text-primary mb-4">Get In Touch</h2>
+                                    <form onSubmit={handleSubmit} className="space-y-6">
+                                        <input required className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary transition-all" placeholder="Your Name..." type="text"/>
+                                        <input required className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary transition-all" placeholder="Your Email..." type="email"/>
+                                        <textarea required className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary transition-all resize-none" placeholder="Message..." rows="5"></textarea>
+                                        <button className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-4 rounded-full shadow-lg transform hover:-translate-y-0.5 transition-all text-lg" type="submit">
+                                            Send Now
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                    <Footer />
+                </div>
+            );
+        };
+
+        // --- App Shell ---
+
+        const App = () => {
+            return (
+                <div className="min-h-screen flex flex-col">
+                    <Navbar />
+                    <div className="flex-grow">
+                        <Routes>
+                            <Route path="/" element={<HomePage />} />
+                            <Route path="/menu" element={<MenuPage />} />
+                            <Route path="/gallery" element={<GalleryPage />} />
+                            <Route path="/about" element={<AboutPage />} />
+                            <Route path="/order" element={<OrderPage />} />
+                            <Route path="/contact" element={<ContactPage />} />
+                        </Routes>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(
+            <MemoryRouter>
+                <App />
+            </MemoryRouter>
+        );
+    </script>
+</body>
+</html>

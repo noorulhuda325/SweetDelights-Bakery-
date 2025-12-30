@@ -1,0 +1,463 @@
+/* ================================================================
+    Sweet Delights - styles.css
+    Elegant & Responsive Bakery Website Design
+================================================================ */
+
+/* ------------------------- Reset & Typography ------------------------- */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    color: #444;
+    background-color: #f7f3f3;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Playfair Display', serif;
+    text-align: center;
+    color: #333;
+}
+
+h1 { font-size: 3.5rem; margin-bottom: 0; }
+h2 { font-size: 2.5rem; }
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* ------------------------- Color Palette ------------------------- */
+:root {
+    --primary-pink: #d991a2;
+    --light-pink: #f0e0e3;
+    --text-dark: #333;
+    --text-light: #fff;
+    --hero-bg: #f9f6f6;
+}
+
+/* ------------------------- Header & Navbar ------------------------- */
+.main-header {
+    background: var(--hero-bg);
+    padding: 15px 5%;
+    border-bottom: 1px solid #eee;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--primary-pink);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--primary-pink);
+}
+
+.order-btn {
+    text-decoration: none;
+    background-color: var(--primary-pink);
+    color: var(--text-light);
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    transition: background-color 0.3s;
+}
+
+.order-btn:hover {
+    background-color: #c97c90;
+}
+
+/* ------------------------- Hero Section (index.html) ------------------------- */
+.hero-section {
+    background-color: var(--hero-bg);
+    /* *CORRECTION:* Changed hard-coded path to a relative path for portability */
+    background-image: url('C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/hero-floral.jpeg'); 
+    background-size: cover;
+    background-position: center top;
+    padding: 80px 5% 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    /* Soft overlay to ensure text is readable against the background image */
+    background: rgba(255, 255, 255, 0.6); 
+    z-index: 1;
+}
+
+.hero-content {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-content p {
+    color: #888;
+    margin-top: 10px;
+    font-size: 1.1rem;
+}
+
+.cta-btn {
+    background-color: var(--primary-pink);
+    color: var(--text-light);
+    border: none;
+    padding: 12px 30px;
+    margin-top: 20px;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.cta-btn:hover {
+    background-color: #c97c90;
+    transform: scale(1.05);
+}
+
+/* ------------------------- Cake Display (Hero Cakes) ------------------------- */
+.cake-display {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px;
+    padding-bottom: 40px;
+    position: relative; 
+    z-index: 2;
+    flex-wrap: wrap;
+}
+
+/* === Equal Size Styling for Hero Cakes === */
+.cake-display img {
+    /* Ensures consistent appearance for all cakes */
+    width: 250px; 
+    height: 250px;
+    object-fit: cover; /* Crops image to fit without stretching */
+    max-width: 100%;
+    border-radius: 5px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.cake:hover {
+    transform: translateY(-8px);
+}
+
+/* Specific classes are now overridden to match the new uniform size */
+.left-cake, .right-cake { 
+    width: 250px; 
+    height: 250px;
+}
+.center-cake { 
+    width: 250px; 
+    margin-top: 0; 
+    height: 250px;
+}
+/* ================================================================= */
+
+/* ------------------------- Product Categories ------------------------- */
+.product-categories {
+    padding: 60px 5%;
+    text-align: center;
+    background-color: var(--light-pink);
+}
+
+.product-categories h2 {
+    margin-bottom: 40px;
+}
+
+.category-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.category-item {
+    background-color: var(--hero-bg);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    /* Allows items to grow/shrink, with a preferred width of 300px */
+    flex: 1 1 300px; 
+    max-width: 350px;
+    transition: transform 0.3s;
+}
+
+.category-item:hover {
+    transform: translateY(-5px);
+}
+
+/* === Product Category Images === */
+.category-item img {
+    width: 100%;
+    /* Fixed height for uniformity */
+    height: 250px; 
+    border-radius: 5px;
+    margin-bottom: 15px;
+    /* Crops the image to fit the fixed height without distortion */
+    object-fit: cover; 
+}
+/* ================================================= */
+
+.category-item h3 {
+    margin: 10px 0;
+    font-size: 1.5rem;
+}
+
+.category-item p {
+    font-size: 0.9rem;
+    color: #666;
+    height: 40px;
+    /* Added to align the text well if lines wrap differently */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-btn {
+    background-color: #fff;
+    color: var(--primary-pink);
+    border: 2px solid var(--primary-pink);
+    padding: 10px 20px;
+    margin-top: 15px;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.category-btn:hover {
+    background-color: var(--primary-pink);
+    color: var(--text-light);
+}
+
+/* ------------------------- Divider ------------------------- */
+.divider {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-style: italic;
+    color: var(--primary-pink);
+    padding: 40px 0;
+    position: relative;
+    background-color: var(--hero-bg);
+}
+
+.divider::before, .divider::after {
+    content: '';
+    position: absolute;
+    width: 25%;
+    height: 1px;
+    top: 50%;
+    background-color: var(--primary-pink);
+}
+.divider::before { left: 10%; }
+.divider::after { right: 10%; }
+
+/* ------------------------- Holiday Offers ------------------------- */
+.holiday-offers {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 60px 5%;
+    background-color: var(--hero-bg);
+    flex-wrap: wrap;
+}
+
+.offer-card {
+    flex: 1 1 320px;
+    max-width: 380px;
+    min-height: 400px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.sale {
+    background-color: var(--light-pink);
+    text-align: center;
+    padding: 30px;
+}
+.sale-content h3 { font-size: 2rem; margin-bottom: 0; color: var(--primary-pink); }
+.sale-content h4 { font-size: 3rem; margin-top: 0; color: var(--primary-pink); }
+
+.featured-product {
+    /* Use column to stack image and button */
+    display: flex; 
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.featured-product img {
+    width: 100%;
+    height: 320px;
+    display: block;
+    object-fit: cover;
+}
+
+.collection {
+    background-color: var(--primary-pink);
+    color: var(--text-light);
+    padding: 30px;
+    text-align: center;
+}
+.collection-content h3 { color: var(--text-light); font-size: 2rem; margin-bottom: 5px; }
+.collection-content p { color: var(--text-light); opacity: 0.8; font-style: italic; margin-top: 0; }
+.collection-content h4 { color: var(--text-light); font-size: 2.5rem; margin-top: 0; }
+
+.order-today-btn, .order-now-btn {
+    border: none;
+    padding: 12px 25px;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.sale .order-today-btn {
+    background-color: var(--primary-pink);
+    color: var(--text-light);
+}
+.sale .order-today-btn:hover { background-color: #c97c90; }
+
+.featured-product .order-today-btn.primary-bg {
+    background-color: var(--primary-pink);
+    color: var(--text-light);
+    width: 100%;
+    /* Keep button flush with bottom of card */
+    border-radius: 0 0 8px 8px; 
+}
+
+.collection .order-now-btn {
+    background-color: var(--text-light);
+    color: var(--primary-pink);
+}
+.collection .order-now-btn:hover { background-color: #eee; }
+
+/* ------------------------- Footer ------------------------- */
+.main-footer {
+    background-color: var(--light-pink);
+    padding: 30px 5%;
+    text-align: center;
+}
+
+.social-media a {
+    color: var(--primary-pink);
+    font-size: 1.5rem;
+    margin: 0 10px;
+    text-decoration: none;
+    display: inline-block; /* Allows transform property to work */
+    transition: all 0.3s;
+}
+
+.social-media a:hover {
+    color: #c97c90;
+    transform: scale(1.1);
+}
+
+.main-footer p {
+    margin-top: 15px;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* ------------------------- Responsive Design ------------------------- */
+@media (max-width: 768px) {
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 2rem; }
+
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .nav-links {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .cake-display {
+        /* Align cakes vertically on smaller screens */
+        flex-direction: column; 
+        align-items: center;
+    }
+    
+    /* Make cakes full width on small screens, but maintain aspect ratio */
+    .cake-display img {
+        width: 80%;
+        max-width: 300px;
+        height: auto; /* Revert to auto height for responsiveness */
+    }
+    .left-cake, .right-cake, .center-cake {
+        margin: 10px 0;
+        margin-top: 10px; 
+    }
+
+    .holiday-offers {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .offer-card {
+        max-width: 90%;
+    }
+
+    .divider::before, .divider::after {
+        width: 15%;
+    }
+}
+
+@media (max-width: 480px) {
+    .order-btn, .cta-btn, .category-btn, .order-today-btn, .order-now-btn {
+        padding: 10px 18px;
+        font-size: 0.8rem;
+    }
+
+    .category-grid {
+        gap: 20px;
+    }
+}

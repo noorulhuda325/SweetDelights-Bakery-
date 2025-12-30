@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweet Delights - Full Gallery</title>
+    
+    <link rel="stylesheet" href="styles.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* Variables copied from your styles.css for use in the inline block */
+        :root {
+            --primary-pink: #d991a2;
+            --light-pink: #f0e0e3;
+            --hero-bg: #f9f6f6;
+        }
+        
+        /* 1. KEYFRAME ANIMATION for subtle header fade-in */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .gallery-container {
+            padding: 40px 5%;
+            background-color: var(--hero-bg);
+            text-align: center;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        
+        .gallery-section-header {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--primary-pink);
+            margin: 60px 0 30px 0;
+            text-align: center;
+            /* Applying the fade-in animation */
+            animation: fadeIn 1.5s ease-out; 
+        }
+
+        /* Sub-Headers for categories */
+        .category-subheader {
+            font-size: 2rem; 
+            border-bottom: 2px solid var(--light-pink); 
+            padding-bottom: 10px;
+            color: #333;
+            font-family: 'Playfair Display', serif;
+            margin-top: 50px;
+        }
+
+        .category-subheader i {
+            color: var(--primary-pink);
+            margin-right: 10px;
+        }
+
+        /* Gallery Grid Layout and Responsiveness */
+        .cake-gallery-grid {
+            display: grid;
+            /* RESPONSIVENESS: 4 columns for large screens, shrinking down */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 20px;
+            margin: 0 auto 50px auto;
+        }
+        
+        /* Individual Gallery Item */
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            background-color: white;
+            /* TRANSITION: Apply smooth transitions for transform/shadow */
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out; 
+            cursor: pointer;
+        }
+        
+        /* Hover Animation (Lift and Zoom) */
+        .gallery-item:hover {
+            transform: scale(1.05) translateY(-8px); /* Lift and zoom effect */
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 250px; 
+            object-fit: cover; 
+            display: block;
+            /* TRANSITION: Image zoom transition */
+            transition: transform 0.5s ease; 
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1); /* Image zoom on hover */
+        }
+        
+        /* Media Query for Mobile Responsiveness */
+        @media (max-width: 600px) {
+            .cake-gallery-grid {
+                /* On small screens, switch to 2 columns */
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            .gallery-item img {
+                height: 150px;
+            }
+            .gallery-section-header {
+                font-size: 2rem;
+            }
+            .category-subheader {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="logo">Sweet Delights</div>
+            <ul class="nav-links">
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/index.html">Home</a></li> 
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/menu.html">Menu</a></li>
+                <li><a href="gallery.html" class="active-link">Gallery</a></li>
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/about.html">About</a></li>
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/contact.html">Contact</a></li>
+            </ul>
+            <a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/order.html" class="order-btn">Order Online Now</a>
+        </nav>
+    </header>
+
+    <div class="gallery-container">
+
+        <h1 class="gallery-section-header">Our Sweet Collections</h1>
+        
+        <h2 class="category-subheader">
+            <i class="fas fa-birthday-cake"></i> Cakes
+        </h2>
+
+        <div class="cake-gallery-grid">
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/choco.jpeg" alt="Chocolate Drip Cake"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/vanilla.jpeg" alt="Vanilla Drip Cake"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/pink.jpeg" alt="Strawberry Shortcake"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/rose.jpeg" alt="Rose Flower Cake"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/white.jpeg" alt="Minimalist Birthday Cake"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/wedding.jpeg" alt="Wedding Cake Tiered"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/blue.jpeg" alt="Dinosaur Theme Cake"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/po.jpeg" alt="Chocolate Raspberry Cake"></div>
+        </div>
+
+        <h2 class="category-subheader">
+            <i class="fas fa-muffin"></i> Cupcakes
+        </h2>
+
+        <div class="cake-gallery-grid">
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/strawberry.jpeg" alt="Pink Swirl Cupcakes"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/chocolate.jpeg" alt="Chocolate Frosted Cupcakes"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/cream.jpeg" alt="Vanilla Confetti Cupcakes"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/red.jpeg" alt="Red Velvet Cupcakes"></div>
+        </div>
+
+        <h2 class="category-subheader">
+            <i class="fas fa-cookie-bite"></i> Macaroons
+        </h2>
+
+        <div class="cake-gallery-grid">
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/sm.jpeg" alt="Pink Macaroons"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/mm.jpeg" alt="Colorful Macaroon Tower"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/cm.jpeg" alt="Chocolate Macaroons"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/pm.jpeg" alt="Pistachio Macaroons"></div>
+        </div>
+        
+        <h2 class="category-subheader">
+            <i class="fas fa-cookie" style="color: #d991a2;"></i> Biscuits
+        </h2>
+
+        <div class="cake-gallery-grid">
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/sb.jpeg" alt="Shortbread Cookies"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/cc.jpeg" alt="Chocolate Chip Cookies"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/ib.jpeg" alt="Iced Biscuits"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/ab.jpeg" alt="Almond Biscotti"></div>
+        </div>
+
+    </div>
+
+        <h2 class="category-subheader">
+            <i class="fas fa-bread-slice"></i> Pastries
+        </h2>
+
+        <div class="cake-gallery-grid">
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/cross.jpeg" alt="Croissants"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/cr.jpeg" alt="Cinnamon Rolls"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/ft.jpeg" alt="Fruit Tarts"></div>
+            <div class="gallery-item"><img src="C:/Users/Mr.Laptop point/Downloads/sweet-delights/images/donut.jpeg" alt="Donuts"></div>
+        </div>
+
+    </div>
+
+    <footer class="main-footer">
+        <div class="social-media">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p>© 2025 Sweet Delights Bakery. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

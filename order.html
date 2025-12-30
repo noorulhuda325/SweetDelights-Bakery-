@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweet Delights Order Form</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@400;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* 1. COLOR PALETTE */
+        :root {
+            --primary-pink: #F9A6C0;
+            --darker-pink: #C26780;
+            --light-pink: #F4DDE5;
+            --lighter-pink: #FFF0F5;
+            --text-dark: #5a3d43;
+            --text-light: #ffffff;
+            --background-body: #F8F0F3;
+            --form-bg: #FFFFFF;
+            --border-color: #ffc1cc;
+        }
+
+        /* 2. GLOBAL STYLES */
+        body {
+            margin: 0;
+            font-family: 'Playfair Display', sans-serif;
+            background: var(--background-body);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 0;
+            box-sizing: border-box;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 3. NAVIGATION BAR */
+        .main-header {
+            width: 100%;
+            background-color: var(--form-bg);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--darker-pink);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0 10px;
+            display: flex;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: var(--text-dark);
+            padding: 10px 15px;
+            font-size: 0.95em;
+            transition: 0.3s;
+            border-radius: 4px;
+        }
+
+        .nav-links li a:hover, .active-link {
+            color: var(--text-light) !important;
+            background-color: var(--primary-pink);
+        }
+
+        /* 4. FORM STYLES */
+        .background-element {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 193, 204, 0.3);
+            border-radius: 50%;
+            filter: blur(50px);
+            z-index: 0;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(20px); }
+        }
+
+        .form-wrapper {
+            margin: 40px 20px;
+            background: var(--form-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 700px;
+            z-index: 1;
+            animation: fadeInScale 0.8s ease-out forwards;
+        }
+
+        /* 5. LIVE TABLE STYLES (New) */
+        .table-wrapper {
+            margin: 20px 20px 80px 20px;
+            background: var(--form-bg);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 900px;
+            z-index: 1;
+        }
+
+        .live-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85em;
+        }
+
+        .live-table th {
+            background-color: var(--primary-pink);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .live-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--light-pink);
+        }
+
+        .live-table tr:nth-child(even) {
+            background-color: var(--lighter-pink);
+        }
+
+        .header-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .logo-placeholder {
+            width: 80px;
+            height: 80px;
+            background: var(--light-pink);
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .logo-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+
+        .form-title h1 { color: var(--darker-pink); margin: 0; font-family: 'Dancing Script'; }
+
+        .input-group { margin-bottom: 20px; }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--darker-pink);
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        .input-group input:not([type="radio"]), 
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--lighter-pink);
+            box-sizing: border-box;
+        }
+
+        .radio-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background: var(--darker-pink);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .submit-button:hover {
+            background: #E29F86;
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            .form-wrapper { padding: 20px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="background-element" style="top:10%; left:5%;"></div>
+    <div class="background-element" style="bottom:10%; right:5%;"></div>
+
+    <header class="main-header">
+        <nav class="navbar">
+            <a href="#" class="logo">Sweet Delights</a>
+            <ul class="nav-links">
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/index.html">Home</a></li>
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/menu.html">Menu</a></li>
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/gallery.html">Gallery</a></li>
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/about.html">About Us</a></li>
+                <li><a href="file:///C:/Users/Mr.Laptop%20point/Downloads/sweet-delights/contact.html">Contact Us</a></li>
+                <li><a href="#" class="active-link">Order</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="form-wrapper">
+        <div class="header-section">
+            <div class="logo-placeholder">
+                <img src="images/logo.jpg" alt="Logo">
+            </div>
+            <div class="form-title">
+                <h1>Sweet Delights</h1>
+                <p style="margin:0; font-weight: bold;">ORDER YOUR TREATS</p>
+            </div>
+        </div>
+
+        <form id="orderForm">
+            <div class="input-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="input-group">
+                <label for="mobile">Mobile Number</label>
+                <input type="tel" id="mobile" name="mobile" required>
+            </div>
+
+            <div class="input-group">
+                <label for="address">Delivery Address</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="input-group">
+                    <label>Cake Flavor</label>
+                    <input type="text" name="cake_flavor" placeholder="e.g. Chocolate">
+                </div>
+                <div class="input-group">
+                    <label>Cupcake Flavor</label>
+                    <input type="text" name="cupcake_flavor" placeholder="e.g. Vanilla">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="special_request">Special Requests / Notes</label>
+                <textarea id="special_request" name="special_request" rows="3"></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px dashed var(--primary-pink); margin: 20px 0;">
+
+            <div class="input-group">
+                <label>Order Type</label>
+                <div class="radio-group">
+                    <input type="radio" id="pickup" name="order_type" value="pickup" checked>
+                    <label for="pickup" style="margin:0; text-transform: none;">Pickup</label>
+                    <input type="time" name="order_time" style="margin-left:20px; padding: 5px; border-radius: 5px; border: 1px solid var(--border-color);">
+                </div>
+                <div class="radio-group">
+                    <input type="radio" id="delivery" name="order_type" value="delivery">
+                    <label for="delivery" style="margin:0; text-transform: none;">Delivery</label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Payment Method</label>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <div class="radio-group">
+                        <input type="radio" name="payment_method" value="cash" checked> Cash
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" name="payment_method" value="mobile_pay"> Mobile Pay
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" name="payment_method" value="bank"> Bank Transfer
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-button">PLACE ORDER NOW</button>
+        </form>
+    </div>
+
+    <div class="table-wrapper">
+        <h3 style="font-family: 'Playfair Display'; color: var(--darker-pink); text-align: center;">Recent Order Records</h3>
+        <div style="overflow-x: auto;">
+            <table class="live-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Address</th>
+                        <th>Cake</th>
+                        <th>Cupcake</th>
+                        <th>Type</th>
+                        <th>Payment</th>
+                    </tr>
+                </thead>
+                <tbody id="orderRecordsBody">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+   <script>
+    const orderForm = document.getElementById('orderForm');
+    const tableBody = document.getElementById('orderRecordsBody');
+
+    // 1. Page load hote hi LocalStorage se purana data nikal kar table mein dikhana
+    window.onload = function() {
+        const savedOrders = JSON.parse(localStorage.getItem('myOrders')) || [];
+        savedOrders.forEach(order => addOrderToTable(order, false));
+    };
+
+    orderForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        const btn = e.target.querySelector('button');
+        btn.innerText = "Processing...";
+        btn.disabled = true;
+
+        try {
+            const response = await fetch('http://localhost:3000/api/order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert('Order placed successfully!');
+                saveAndDisplayOrder(data);
+                this.reset();
+            }
+        } catch (error) {
+            // Agar server nahi bhi chal raha, tab bhi browser mein save hoga
+            saveAndDisplayOrder(data);
+            alert('Order saved in browser storage.');
+        } finally {
+            btn.innerText = "PLACE ORDER NOW";
+            btn.disabled = false;
+        }
+    });
+
+    // 2. Data ko LocalStorage mein save karne aur table mein dikhane ka function
+    function saveAndDisplayOrder(order) {
+        // Purane orders nikalna
+        const orders = JSON.parse(localStorage.getItem('myOrders')) || [];
+        // Naya order list mein add karna
+        orders.push(order);
+        // Wapas LocalStorage mein save karna
+        localStorage.setItem('myOrders', JSON.stringify(orders));
+        
+        addOrderToTable(order, true);
+    }
+
+    function addOrderToTable(order, atTop) {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td>${order.name}</td>
+            <td>${order.mobile}</td>
+            <td>${order.address}</td>
+            <td>${order.cake_flavor || '-'}</td>
+            <td>${order.cupcake_flavor || '-'}</td>
+            <td>${order.order_type}</td>
+            <td>${order.payment_method}</td>
+        `;
+        
+        if (atTop) {
+            tableBody.prepend(newRow);
+        } else {
+            tableBody.appendChild(newRow);
+        }
+    }
+</script>
+</body>
+</html>
